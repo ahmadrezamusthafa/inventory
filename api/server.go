@@ -1,8 +1,13 @@
 package api
 
 import (
+	"fmt"
+	"github.com/gorilla/mux"
 	"github.com/rezamusthafa/inventory/api/configuration"
 	"github.com/rezamusthafa/inventory/api/services"
+	"github.com/rezamusthafa/inventory/util"
+	"github.com/rs/cors"
+	"net/http"
 )
 
 type Server struct {
@@ -23,5 +28,30 @@ func NewServer(
 		productService:   productSvc,
 		incommingService: incommingSvc,
 		outgoingService:  outgoingSvc,
+	}
+}
+
+func (s *Server) NewRouter() *mux.Router {
+	router := mux.NewRouter().StrictSlash(true)
+
+	router.HandleFunc("/product/create", s.productService.CreateProduct).Methods("POST")
+	router.HandleFunc("/outgoing/create", s.outgoingService.CreateOutgoingProduct).Methods("POST")
+
+	return router
+}
+
+func (s *Server) Run() {
+	var port = util.ExtractServerAddressPort(s.configuration.App.BackEndAddress)
+	fmt.Println("Starting API at http://localhost:" + port + "/")
+
+	router := s.NewRouter()
+	corsMiddleware := cors.New(cors.Options{
+		AllowedMethods: []string{"OPTIONS", "GET", "POST", "PUT", "DELETE"},
+		Debug:          false,
+	})
+
+	err := http.ListenAndServe(":"+port, corsMiddleware.Handler(router))
+	if err != nil {
+		fmt.Errorf("ListenAndServe Error: ", err)
 	}
 }

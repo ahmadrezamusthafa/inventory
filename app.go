@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/rezamusthafa/inventory/api"
 	"github.com/rezamusthafa/inventory/api/configuration"
 	"github.com/rezamusthafa/inventory/api/repository"
 	"github.com/rezamusthafa/inventory/api/repository/dbo"
@@ -58,6 +59,9 @@ func runServer() {
 
 	initRepository(db)
 	initService()
+
+	server := api.NewServer(configuration, productSvc, incommingSvc, outgoingSvc)
+	server.Run()
 }
 
 func main() {

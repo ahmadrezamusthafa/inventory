@@ -22,3 +22,8 @@ func (repository *IncommingDetailRepository) GetAll() []dbo.IncommingProductDeta
 	repository.databaseORM.Debug().Find(&incommingProductDetails)
 	return incommingProductDetails
 }
+
+func (repository *IncommingDetailRepository) Create(incommingProductDetail dbo.IncommingProductDetail) error {
+	db := repository.databaseORM.Create(&incommingProductDetail)
+	return db.Error
+}

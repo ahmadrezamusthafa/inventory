@@ -7,7 +7,7 @@ import (
 type IncommingProduct struct {
 	gorm.Model
 	Product       *Product
-	ProductId     int     `gorm:"type:integer REFERENCES product(id) ON DELETE CASCADE ON UPDATE CASCADE"`
+	ProductID     int     `gorm:"type:integer REFERENCES product(id) ON DELETE CASCADE ON UPDATE CASCADE"`
 	Receipt       string  `gorm:"type:varchar(100);NOT NULL;UNIQUE"`
 	OrderQty      int     `gorm:"type:integer"`
 	PurchasePrice float64 `gorm:"type:float8;NOT NULL"`
