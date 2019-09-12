@@ -45,6 +45,8 @@ func (s *Server) NewRouter() *mux.Router {
 	router.HandleFunc("/outgoing/get", s.outgoingService.GetOutgoingProduct).Methods("GET")
 	router.HandleFunc("/report/product/get", s.reportService.GetReportValueOfProduct).Methods("GET")
 	router.HandleFunc("/report/sales/get", s.reportService.GetSalesReport).Methods("GET")
+	router.HandleFunc("/report/product/export", s.reportService.ExportReportValueOfProduct).Methods("GET")
+	router.HandleFunc("/report/sales/export", s.reportService.ExportSalesReport).Methods("GET")
 
 	return router
 }
