@@ -55,9 +55,48 @@ func (repository *ProductRepository) GetProduct(filter inputs.Filter) ([]types.P
 		}
 
 		product.Stock = incommingTotal - outgoingTotal
+		products = append(products, product)
+	}
+
+	return products, nil
+}
+
+func (repository *ProductRepository) GetProductReport(filter inputs.Filter) ([]types.ProductReport, error) {
+
+	var products []types.ProductReport
+	rows, err := repository.databaseORM.Raw(
+		`select id, sku, name, created_at from product where created_at >= ? and created_at <= ? order by created_at desc`, filter.StartDate, filter.EndDate).Rows()
+	if err != nil {
+		return []types.ProductReport{}, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var product types.ProductReport
+		err := rows.Scan(&product.ID, &product.SKU, &product.Name, &product.CreatedAt)
 		if err != nil {
-			return []types.Product{}, err
+			return []types.ProductReport{}, err
 		}
+
+		product.StrCreatedAt = product.CreatedAt.Format(util.Timestamp)
+		incommingTotal, err := getIncommingTotalByProduct(product.ID, repository.databaseORM)
+		if err != nil {
+			return []types.ProductReport{}, err
+		}
+
+		outgoingTotal, err := getOutgoingTotalByProduct(product.ID, repository.databaseORM)
+		if err != nil {
+			return []types.ProductReport{}, err
+		}
+
+		avgPurchasePrice, err := getAveragePurchasePriceByProduct(product.ID, repository.databaseORM)
+		if err != nil {
+			return []types.ProductReport{}, err
+		}
+
+		product.Stock = incommingTotal - outgoingTotal
+		product.AvgPurchasePrice = avgPurchasePrice
+		product.TotalPrice = avgPurchasePrice * float64(product.Stock)
 
 		products = append(products, product)
 	}

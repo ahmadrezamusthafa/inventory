@@ -23,6 +23,7 @@ var (
 	productSvc   *services.ProductService
 	incommingSvc *services.IncommingService
 	outgoingSvc  *services.OutgoingService
+	reportSvc    *services.ReportService
 )
 
 func connectToDatabase(config *configuration.Configuration) (*gorm.DB, error) {
@@ -40,6 +41,7 @@ func initService() {
 	productSvc = services.NewProductService(config, productRepository, incommingRepository, incommingDetailRepository, outgoingRepository)
 	incommingSvc = services.NewIncommingService(config, productRepository, incommingRepository, incommingDetailRepository)
 	outgoingSvc = services.NewOutgoingService(config, productRepository, outgoingRepository, incommingDetailRepository)
+	reportSvc = services.NewReportService(config, productRepository, incommingRepository, incommingDetailRepository, outgoingRepository)
 }
 
 func runServer() {
@@ -60,7 +62,7 @@ func runServer() {
 	initRepository(db)
 	initService()
 
-	server := api.NewServer(configuration, productSvc, incommingSvc, outgoingSvc)
+	server := api.NewServer(configuration, productSvc, incommingSvc, outgoingSvc, reportSvc)
 	server.Run()
 }
 

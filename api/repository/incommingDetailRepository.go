@@ -74,3 +74,24 @@ func getIncommingTotalByProduct(productID int, db *gorm.DB) (int, error) {
 
 	return total, nil
 }
+
+func getAveragePurchasePriceByProduct(productID int, db *gorm.DB) (float64, error) {
+
+	var price float64
+	rows, err := db.Raw("select coalesce(avg(purchase_price),0) as total from incomming_product where product_id = ?", productID).Rows()
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&price)
+		if err != nil {
+			return 0, err
+		}
+
+		break
+	}
+
+	return price, nil
+}

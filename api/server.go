@@ -15,19 +15,22 @@ type Server struct {
 	productService   *services.ProductService
 	incommingService *services.IncommingService
 	outgoingService  *services.OutgoingService
+	reportService    *services.ReportService
 }
 
 func NewServer(
 	config *configuration.Configuration,
 	productSvc *services.ProductService,
 	incommingSvc *services.IncommingService,
-	outgoingSvc *services.OutgoingService) *Server {
+	outgoingSvc *services.OutgoingService,
+	reportSvc *services.ReportService) *Server {
 
 	return &Server{
 		configuration:    config,
 		productService:   productSvc,
 		incommingService: incommingSvc,
 		outgoingService:  outgoingSvc,
+		reportService:    reportSvc,
 	}
 }
 
@@ -40,6 +43,8 @@ func (s *Server) NewRouter() *mux.Router {
 	router.HandleFunc("/incomming/get", s.incommingService.GetIncommingProduct).Methods("GET")
 	router.HandleFunc("/outgoing/create", s.outgoingService.CreateOutgoingProduct).Methods("POST")
 	router.HandleFunc("/outgoing/get", s.outgoingService.GetOutgoingProduct).Methods("GET")
+	router.HandleFunc("/report/product/get", s.reportService.GetReportValueOfProduct).Methods("GET")
+	router.HandleFunc("/report/sales/get", s.reportService.GetSalesReport).Methods("GET")
 
 	return router
 }

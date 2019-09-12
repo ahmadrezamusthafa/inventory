@@ -98,8 +98,8 @@ func (service *OutgoingService) CreateOutgoingProduct(w http.ResponseWriter, r *
 		return
 	}
 
-	if service.outgoingRepository.IsOrderCodeAvailable(product.OrderCode) {
-		response.WriteError("Order code is already exist", w)
+	if service.outgoingRepository.IsOrderCodeAndProductAvailable(product.OrderCode, product.ProductID) {
+		response.WriteError("Order code and product id is already exist", w)
 		return
 	}
 
