@@ -23,6 +23,29 @@ func (repository *ProductRepository) GetAll() []dbo.Product {
 	return products
 }
 
+func (repository *ProductRepository) GetAvailableStock(productID int) (stock int, err error) {
+
+	var (
+		incomming IncommingDetailRepository
+		outgoing  OutgoingRepository
+
+		incommingTotal int
+		outgoingTotal  int
+	)
+
+	incommingTotal, err = incomming.GetIncommingTotalByProduct(productID)
+	if err != nil {
+		return 0, err
+	}
+
+	outgoingTotal, err = outgoing.GetOutgoingTotalByProduct(productID)
+	if err != nil {
+		return 0, err
+	}
+
+	return incommingTotal - outgoingTotal, nil
+}
+
 func (repository *ProductRepository) IsProductAvailable(id int) bool {
 	var row dbo.Product
 	return !repository.databaseORM.First(&row, "id = ?", id).RecordNotFound()

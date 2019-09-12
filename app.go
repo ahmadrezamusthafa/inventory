@@ -39,7 +39,7 @@ func initRepository(db *gorm.DB) {
 func initService() {
 	productSvc = services.NewProductService(config, productRepository, incommingRepository, incommingDetailRepository, outgoingRepository)
 	incommingSvc = services.NewIncommingService(config, productRepository, incommingRepository, incommingDetailRepository)
-	outgoingSvc = services.NewOutgoingService(config, productRepository, outgoingRepository)
+	outgoingSvc = services.NewOutgoingService(config, productRepository, outgoingRepository, incommingDetailRepository)
 }
 
 func runServer() {

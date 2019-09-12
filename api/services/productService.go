@@ -50,7 +50,7 @@ func (service *ProductService) CreateProduct(w http.ResponseWriter, r *http.Requ
 
 	data, err = ioutil.ReadAll(r.Body)
 	if err != nil {
-		response.WriteError("Failed read body request", w)
+		response.WriteError("Failed to read body request", w)
 		return
 	}
 
@@ -87,7 +87,7 @@ func (service *ProductService) CreateProduct(w http.ResponseWriter, r *http.Requ
 		Name: name,
 	})
 	if err != nil {
-		response.WriteError("Failed create product", w)
+		response.WriteError("Failed to create product", w)
 	}
 
 	var successObj = results.TransactionStatus{Message: "Successfully created product"}

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"github.com/json-iterator/go"
 	"github.com/rezamusthafa/inventory/api/configuration"
 	"github.com/rezamusthafa/inventory/api/repository"
@@ -13,20 +14,23 @@ import (
 )
 
 type OutgoingService struct {
-	configuration      *configuration.Configuration
-	productRepository  *repository.ProductRepository
-	outgoingRepository *repository.OutgoingRepository
+	configuration             *configuration.Configuration
+	productRepository         *repository.ProductRepository
+	outgoingRepository        *repository.OutgoingRepository
+	incommingDetailRepository *repository.IncommingDetailRepository
 }
 
 func NewOutgoingService(
 	config *configuration.Configuration,
 	productRepo *repository.ProductRepository,
-	outgoingRepo *repository.OutgoingRepository) *OutgoingService {
+	outgoingRepo *repository.OutgoingRepository,
+	incommingDetailRepo *repository.IncommingDetailRepository) *OutgoingService {
 
 	return &OutgoingService{
-		configuration:      config,
-		productRepository:  productRepo,
-		outgoingRepository: outgoingRepo,
+		configuration:             config,
+		productRepository:         productRepo,
+		outgoingRepository:        outgoingRepo,
+		incommingDetailRepository: incommingDetailRepo,
 	}
 }
 
@@ -34,14 +38,15 @@ func (service *OutgoingService) CreateOutgoingProduct(w http.ResponseWriter, r *
 	w.Header().Set("Content-Type", "application/json")
 
 	var (
-		err     error
-		data    []byte
-		product inputs.Outgoing
+		err            error
+		data           []byte
+		product        inputs.Outgoing
+		availableStock int
 	)
 
 	data, err = ioutil.ReadAll(r.Body)
 	if err != nil {
-		response.WriteError("Failed read body request", w)
+		response.WriteError("Failed to read body request", w)
 		return
 	}
 
@@ -53,6 +58,17 @@ func (service *OutgoingService) CreateOutgoingProduct(w http.ResponseWriter, r *
 
 	if product.ProductID == 0 || product.OrderQty == 0 || product.SellingPrice == 0 || product.OrderCode == "" {
 		response.WriteError("Missing request parameter", w)
+		return
+	}
+
+	availableStock, err = service.GetAvailableStock(product.ProductID)
+	if err != nil {
+		response.WriteError("Failed to get available stock", w)
+		return
+	}
+
+	if availableStock < product.OrderQty {
+		response.WriteError(fmt.Sprintf("Available product stock is %d", availableStock), w)
 		return
 	}
 
@@ -74,9 +90,29 @@ func (service *OutgoingService) CreateOutgoingProduct(w http.ResponseWriter, r *
 		TotalPrice:   (float64(product.OrderQty) * product.SellingPrice),
 	})
 	if err != nil {
-		response.WriteError("Failed create outgoing product", w)
+		response.WriteError("Failed to create outgoing product", w)
 	}
 
 	var successObj = results.TransactionStatus{Message: "Successfully created outgoing product"}
 	response.WriteSuccess(successObj, w)
+}
+
+func (service *OutgoingService) GetAvailableStock(productID int) (stock int, err error) {
+
+	var (
+		incommingTotal int
+		outgoingTotal  int
+	)
+
+	incommingTotal, err = service.incommingDetailRepository.GetIncommingTotalByProduct(productID)
+	if err != nil {
+		return 0, err
+	}
+
+	outgoingTotal, err = service.outgoingRepository.GetOutgoingTotalByProduct(productID)
+	if err != nil {
+		return 0, err
+	}
+
+	return (incommingTotal - outgoingTotal), nil
 }

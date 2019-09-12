@@ -32,3 +32,24 @@ func (repository *OutgoingRepository) Create(outgoingProduct dbo.OutgoingProduct
 	db := repository.databaseORM.Create(&outgoingProduct)
 	return db.Error
 }
+
+func (repository *OutgoingRepository) GetOutgoingTotalByProduct(productID int) (int, error) {
+
+	var total int
+	rows, err := repository.databaseORM.Raw("select sum(order_qty) as total from outgoing_product where product_id = ?", productID).Rows()
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&total)
+		if err != nil {
+			return 0, err
+		}
+
+		break
+	}
+
+	return total, nil
+}

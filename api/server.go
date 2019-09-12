@@ -35,6 +35,8 @@ func (s *Server) NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/product/create", s.productService.CreateProduct).Methods("POST")
+	router.HandleFunc("/incomming/create", s.incommingService.CreateIncommingProduct).Methods("POST")
+	router.HandleFunc("/incomming/get", s.incommingService.GetIncommingProduct).Methods("GET")
 	router.HandleFunc("/outgoing/create", s.outgoingService.CreateOutgoingProduct).Methods("POST")
 
 	return router
