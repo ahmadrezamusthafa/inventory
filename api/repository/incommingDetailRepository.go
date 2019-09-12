@@ -36,7 +36,28 @@ func (repository *IncommingDetailRepository) CreateWithTx(tx *gorm.DB, incomming
 func (repository *IncommingDetailRepository) GetIncommingTotalByProduct(productID int) (int, error) {
 
 	var total int
-	rows, err := repository.databaseORM.Raw("select sum(accepted_qty) as total from incomming_product_detail ipd, incomming_product ip where ip.id=ipd.incomming_product_id and ip.product_id = ?", productID).Rows()
+	rows, err := repository.databaseORM.Raw("select coalesce(sum(accepted_qty),0) as total from incomming_product_detail ipd, incomming_product ip where ip.id=ipd.incomming_product_id and ip.product_id = ?", productID).Rows()
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&total)
+		if err != nil {
+			return 0, err
+		}
+
+		break
+	}
+
+	return total, nil
+}
+
+func getIncommingTotalByProduct(productID int, db *gorm.DB) (int, error) {
+
+	var total int
+	rows, err := db.Raw("select coalesce(sum(accepted_qty),0) as total from incomming_product_detail ipd, incomming_product ip where ip.id=ipd.incomming_product_id and ip.product_id = ?", productID).Rows()
 	if err != nil {
 		return 0, err
 	}

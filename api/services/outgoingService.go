@@ -34,6 +34,27 @@ func NewOutgoingService(
 	}
 }
 
+func (service *OutgoingService) GetOutgoingProduct(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	queryValues := r.URL.Query()
+	filterParam, err := validateRequest(queryValues)
+	if err != nil {
+		response.WriteError(err.Error(), w)
+		return
+	}
+
+	outgoingProducts, err := service.outgoingRepository.GetOutgoingProduct(filterParam)
+	if err != nil {
+		response.WriteError("Failed to get outgoing product", w)
+		return
+	}
+
+	response.WriteSuccess(outgoingProducts, w)
+
+	return
+}
+
 func (service *OutgoingService) CreateOutgoingProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 

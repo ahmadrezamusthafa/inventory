@@ -39,6 +39,27 @@ func NewProductService(
 	}
 }
 
+func (service *ProductService) GetProduct(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	queryValues := r.URL.Query()
+	filterParam, err := validateRequest(queryValues)
+	if err != nil {
+		response.WriteError(err.Error(), w)
+		return
+	}
+
+	products, err := service.productRepository.GetProduct(filterParam)
+	if err != nil {
+		response.WriteError("Failed to get product", w)
+		return
+	}
+
+	response.WriteSuccess(products, w)
+
+	return
+}
+
 func (service *ProductService) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 

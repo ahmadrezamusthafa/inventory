@@ -9,7 +9,7 @@ type Incomming struct {
 	PurchasePrice float64 `json:"purchase_price"`
 }
 
-type IncommingFilter struct {
+type Filter struct {
 	StartDate string `json:"start_date"`
 	EndDate   string `json:"end_date"`
 	Page      int    `json:"page"`

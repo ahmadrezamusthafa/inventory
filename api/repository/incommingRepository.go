@@ -67,12 +67,12 @@ func (repository *IncommingRepository) GetIncommingProductDetail(incommingProduc
 	return incommingProductDetails, summaryDetail, nil
 }
 
-func (repository *IncommingRepository) GetIncommingProduct(filter inputs.IncommingFilter) ([]types.IncommingProduct, error) {
+func (repository *IncommingRepository) GetIncommingProduct(filter inputs.Filter) ([]types.IncommingProduct, error) {
 
 	var incommingProducts []types.IncommingProduct
 	rows, err := repository.databaseORM.Raw(
 		`select ip.id, p.id, p.sku, p.name, ip.order_qty, ip.purchase_price, ip.total_price, COALESCE(ip.receipt,'(hilang)') receipt, p.created_at from incomming_product ip, product p
-             where ip.product_id = p.id and p.created_at >= ? and p.created_at <= ?`, filter.StartDate, filter.EndDate).Rows()
+             where ip.product_id = p.id and ip.created_at >= ? and ip.created_at <= ? order by ip.created_at desc`, filter.StartDate, filter.EndDate).Rows()
 	if err != nil {
 		return []types.IncommingProduct{}, err
 	}

@@ -9,12 +9,8 @@ import (
 	"github.com/rezamusthafa/inventory/api/response"
 	"github.com/rezamusthafa/inventory/api/response/results"
 	"github.com/rezamusthafa/inventory/api/services/inputs"
-	"github.com/rezamusthafa/inventory/util"
 	"io/ioutil"
 	"net/http"
-	"net/url"
-	"strconv"
-	"time"
 )
 
 type IncommingService struct {
@@ -57,45 +53,6 @@ func (service *IncommingService) GetIncommingProduct(w http.ResponseWriter, r *h
 	response.WriteSuccess(incommingProducts, w)
 
 	return
-}
-
-func validateRequest(queryValues url.Values) (inputs.IncommingFilter, error) {
-
-	var filter inputs.IncommingFilter
-
-	startDate := queryValues.Get("start_date")
-	_, err := time.Parse(util.DateOnly, startDate)
-	if err != nil {
-		return inputs.IncommingFilter{}, errors.New("Invalid request parameter")
-	}
-	filter.StartDate = startDate
-
-	endDate := queryValues.Get("end_date")
-	_, err = time.Parse(util.DateOnly, endDate)
-	if err != nil {
-		return inputs.IncommingFilter{}, errors.New("Invalid request parameter")
-	}
-	filter.EndDate = endDate
-
-	filter.Page, err = strconv.Atoi(queryValues.Get("page"))
-	if err != nil {
-		return inputs.IncommingFilter{}, errors.New("Invalid request parameter")
-	}
-
-	if filter.Page <= 0 {
-		filter.Page = 1
-	}
-
-	filter.Limit, err = strconv.Atoi(queryValues.Get("limit"))
-	if err != nil {
-		return inputs.IncommingFilter{}, errors.New("Invalid request parameter")
-	}
-
-	if filter.Limit <= 0 {
-		filter.Limit = 10
-	}
-
-	return filter, nil
 }
 
 func (service *IncommingService) CreateIncommingProduct(w http.ResponseWriter, r *http.Request) {
