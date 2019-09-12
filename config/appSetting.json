@@ -1,0 +1,11 @@
+{
+  "App": {
+    "ServerAddress": "localhost",
+    "BackEndAddress": "http://localhost:8080/",
+    "FrontEndAddress": "http://localhost:4200/",
+    "Debug": true
+  },
+  "ConnectionString": {
+    "Path": "inventory.db"
+  }
+}
