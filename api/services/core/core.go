@@ -4,8 +4,14 @@ import (
 	"encoding/csv"
 	"errors"
 	"fmt"
+	"github.com/json-iterator/go"
+	"github.com/rezamusthafa/inventory/api/configuration"
+	"github.com/rezamusthafa/inventory/api/repository/dbo"
 	"github.com/rezamusthafa/inventory/api/services/inputs"
 	"github.com/rezamusthafa/inventory/util"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+	"google.golang.org/api/sheets/v4"
 	"math/rand"
 	"os"
 	"reflect"
@@ -152,4 +158,76 @@ func appendInterfaceToSliceString(str []string, val interface{}) []string {
 		str = append(str, fmt.Sprint(val))
 	}
 	return str
+}
+
+func ReadSheetProduct(config *configuration.Configuration) (products []dbo.Product, err error) {
+
+	type Credential struct {
+		Type         string `json:"type"`
+		ProjectID    string `json:"project_id"`
+		PrivateKeyID string `json:"private_key_id"`
+		PrivateKey   string `json:"private_key"`
+		ClientEmail  string `json:"client_email"`
+		ClientID     string `json:"client_id"`
+		TokenURL     string `json:"token_uri"`
+	}
+
+	credential, err := jsoniter.Marshal(Credential{
+		Type:         config.SheetCredential.Type,
+		ProjectID:    config.SheetCredential.ProjectID,
+		PrivateKeyID: config.SheetCredential.PrivateKeyID,
+		PrivateKey:   config.SheetCredential.PrivateKey,
+		ClientEmail:  config.SheetCredential.ClientEmail,
+		ClientID:     config.SheetCredential.ClientID,
+		TokenURL:     config.SheetCredential.TokenURL,
+	})
+	if err != nil {
+		return products, errors.New("Marshal error")
+	}
+
+	scope := config.SheetCredential.Scope
+	if scope == "" {
+		return products, errors.New("Scope is required")
+	}
+
+	jwtConfig, err := google.JWTConfigFromJSON(credential, scope)
+	if err != nil {
+		return products, errors.New(fmt.Sprintf("Unable to parse client secret file to config: %v", err))
+	}
+
+	client := jwtConfig.Client(oauth2.NoContext)
+
+	srv, err := sheets.New(client)
+	if err != nil {
+		return products, errors.New(fmt.Sprintf("Unable to retrieve Sheets client: %v", err))
+	}
+
+	spreadsheetId := config.SheetCredential.SheetID
+	readRange := "A2:B"
+	resp, err := srv.Spreadsheets.Values.Get(spreadsheetId, readRange).Do()
+	if err != nil {
+		return products, errors.New(fmt.Sprintf("Unable to retrieve data from sheet: %v", err))
+	}
+
+	if len(resp.Values) == 0 {
+		fmt.Println("No data found")
+	} else {
+		for _, row := range resp.Values {
+			if len(row) >= 2 {
+				sku := strings.TrimSpace(fmt.Sprint(row[0]))
+				name := strings.TrimSpace(fmt.Sprint(row[1]))
+
+				if sku == "" || name == "" {
+					continue
+				}
+
+				products = append(products, dbo.Product{
+					SKU:  sku,
+					Name: name,
+				})
+			}
+		}
+	}
+
+	return products, nil
 }
