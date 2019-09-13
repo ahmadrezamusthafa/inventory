@@ -55,8 +55,6 @@ func (service *ReportService) GetReportValueOfProduct(w http.ResponseWriter, r *
 	}
 
 	response.WriteSuccess(products, w)
-
-	return
 }
 
 func (service *ReportService) GetSalesReport(w http.ResponseWriter, r *http.Request) {
@@ -76,8 +74,6 @@ func (service *ReportService) GetSalesReport(w http.ResponseWriter, r *http.Requ
 	}
 
 	response.WriteSuccess(products, w)
-
-	return
 }
 
 func (service *ReportService) ExportReportValueOfProduct(w http.ResponseWriter, r *http.Request) {
@@ -148,8 +144,6 @@ func (service *ReportService) ExportReportValueOfProduct(w http.ResponseWriter, 
 
 	file.Seek(0, 0)
 	io.Copy(w, file)
-
-	return
 }
 
 func (service *ReportService) ExportSalesReport(w http.ResponseWriter, r *http.Request) {
@@ -224,6 +218,4 @@ func (service *ReportService) ExportSalesReport(w http.ResponseWriter, r *http.R
 
 	file.Seek(0, 0)
 	io.Copy(w, file)
-
-	return
 }

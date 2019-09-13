@@ -56,8 +56,6 @@ func (service *ProductService) GetProduct(w http.ResponseWriter, r *http.Request
 	}
 
 	response.WriteSuccess(products, w)
-
-	return
 }
 
 func (service *ProductService) CreateProduct(w http.ResponseWriter, r *http.Request) {

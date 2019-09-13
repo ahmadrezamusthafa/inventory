@@ -52,8 +52,6 @@ func (service *IncommingService) GetIncommingProduct(w http.ResponseWriter, r *h
 	}
 
 	response.WriteSuccess(incommingProducts, w)
-
-	return
 }
 
 func (service *IncommingService) CreateIncommingProduct(w http.ResponseWriter, r *http.Request) {
