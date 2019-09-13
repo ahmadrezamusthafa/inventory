@@ -52,8 +52,6 @@ func (service *OutgoingService) GetOutgoingProduct(w http.ResponseWriter, r *htt
 	}
 
 	response.WriteSuccess(outgoingProducts, w)
-
-	return
 }
 
 func (service *OutgoingService) CreateOutgoingProduct(w http.ResponseWriter, r *http.Request) {

@@ -7,5 +7,16 @@
   },
   "ConnectionString": {
     "Path": "inventory.db"
+  },
+  "SheetCredential": {
+    "SheetID": "1lhN7Kl7bp8rpLs7GBiuFoEdafxpzZeSMEzoSqY3MoVw",
+    "Scope": "https://www.googleapis.com/auth/spreadsheets.readonly",
+    "Type": "service_account",
+    "ProjectID": "jogoku-1101",
+    "PrivateKeyID": "3d087e053655fb31dda95fc97d46b6061817df7f",
+    "PrivateKey": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDePw6b7v4qs4p0\n3Y5n+OypsCj2jmfVE4AJTcqkBqUzEYXmpR0PwMOLy7B91jgO8fso/x5qDFpahDmh\nDnOtkUE7CmLwWDX/rTW5gC8HzIAUFCKpMgtlJGzfIGxOkVliCnEWeCYhwE8Y0LDt\nO4zLRBDHLyZYHNnwdEwLafGgw/3mN/VW8NBv5/Dh2+8wUScqcR07YATQWs7Ch1cn\n+TIokWV/LD5aJRrGeQf4/dpdhWgKIoYl0E0slELYDjqXddshVT62ta5JbrFtmmL9\nxFJAfBSekLgizv8E2daSediylfj6ah2wYyhDBvgDldKp2xge9hYf6DIk5K0V6+zT\nWNdgheWFAgMBAAECggEAA4PARaTb1fg1EZWPuGMLomsD2X2q3zKvKkErGfkf7i+S\nAZyCrzqCF9PJZKgOsWUlbsJ1bEG/QQyzw5wF+3dKA+Fta0sd1CoHU48XJKVY24MZ\nAY97diaYu9ZDAuK8ujabj2UoMeLybUb0RqrT1m1rDYIC9iRDVGXmbkzHMolpmmp9\nvqrkraQuS0ssfbvNGc629A6beqLBEmYYSbH0lVrfpIu70HUnT9BiPpzbc+rnBT4J\nM2cbc7DkL3YNv5DD7iDSMcZTJrcodrJ7vsmQLSZNMYTbtjz20kLl5dPE/rNSArGk\nBF0JwNcy1MGJrU+61QkksKVF7IrIeo3B5Ae6rM2WiQKBgQD6iI4HqgqB7LJ4GCKa\nOKMsBTn9aI3tphy0I8XValK4kRmsr2dOehstF3h/ZOrvV+lfmlUX0l2IqGZJs2z9\nwXuO6InEwHwHaKR23Ly4f5R22eV4AyD0xKBGiKxzyWcoYzD7gfDDFIpgofeV4P4Q\nNPIEK+b0QxSst8jTkhBMsGPOCQKBgQDjGH6RuTMZK8ILPOnSOSGsmb0AcyqrWYJS\n37+c40PXs8oRAzKbIbsF7CM3arbZ5eUkS7gXAANsBmNoOffnoX3YP9SILzq0Q8EO\nlMH0RPm6QmG1ohNWqe4QOCghTPoxGrdHxC4RzmShb/oOttrlWaXIMSXNRdwujohs\n8HEk2i66nQKBgQCJ3VtLHGdr17TeIWnpNAGW18lxiXeQrzhcaNMU/c1Hg5F9VYij\nxs3tolzMvdwKmXXzBhqNYVXXPdQL+pCfkzlLCuvFOacG7K6UOiQf4xTv0jhUMmSQ\nTSNlrRA5Jzt9Hhh2TqsOrt73DioQcB9fC8OiSAZvo/pckUYSJu6RRP+nAQKBgQCg\n8igpwPas/S0t58LTQbhS6jZgDj8MZ4iMkZTsbMkVI4+vFPQVrAcvQFcJHHFw5pTK\nb3uNmW3TboefQ44ltHdK/pny1n4laet2GQmIxCW00v0KzE4mWpKlHhea2kJq8MM6\ncpgv+HWrUIAJU6C5cRqkUei3na5ZtJyNkK6vbo41pQKBgQCI+tDKmreYA3T8F+kB\nHZPDaPcQHMTlP3OhBTD0aOflQmaCdG5cNe1L2HGvs5Bcfb+H+FC1N413ikxpnAHY\nnyNxgdQYyyy+gRfO6BJI/Fg5ryu5dtDmd5i93Cd153zIIelH8MQqZjNZRnQsStO3\njYo1U+gqvEuuC6BLwmkiUFG0Gg==\n-----END PRIVATE KEY-----\n",
+    "ClientEmail": "gsheetservice-80@jogoku-1101.iam.gserviceaccount.com",
+    "ClientID": "105117263016065098024",
+    "TokenURL": "https://oauth2.googleapis.com/token"
   }
 }

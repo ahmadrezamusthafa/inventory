@@ -11,6 +11,7 @@ import (
 type Configuration struct {
 	App              types.App
 	ConnectionString types.ConnectionString
+	SheetCredential  types.SheetCredential
 }
 
 func NewConfiguration() (*Configuration, error) {

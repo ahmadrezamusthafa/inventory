@@ -10,3 +10,15 @@ type App struct {
 	FrontEndAddress string
 	Debug           bool
 }
+
+type SheetCredential struct {
+	SheetID      string
+	Scope        string
+	Type         string
+	ProjectID    string
+	PrivateKeyID string
+	PrivateKey   string
+	ClientEmail  string
+	ClientID     string
+	TokenURL     string
+}
