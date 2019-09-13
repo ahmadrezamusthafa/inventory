@@ -8,6 +8,8 @@ import (
 	"github.com/rezamusthafa/inventory/util"
 	"github.com/rs/cors"
 	"net/http"
+	"path"
+	"runtime"
 )
 
 type Server struct {
@@ -34,6 +36,17 @@ func NewServer(
 	}
 }
 
+func (s *Server) NewFrontEndRouter() *mux.Router {
+
+	_, runningFile, _, _ := runtime.Caller(1)
+	frontendPath := path.Join(path.Dir(runningFile), "../web")
+
+	router := mux.NewRouter().StrictSlash(true)
+	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(frontendPath))))
+
+	return router
+}
+
 func (s *Server) NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
@@ -51,6 +64,22 @@ func (s *Server) NewRouter() *mux.Router {
 	return router
 }
 
+func (s *Server) RunFrontEnd() {
+	var port = util.ExtractServerAddressPort(s.configuration.App.FrontEndAddress)
+	fmt.Println("Starting WEB at http://localhost:" + port + "/")
+
+	router := s.NewFrontEndRouter()
+	corsMiddleware := cors.New(cors.Options{
+		AllowedMethods: []string{"OPTIONS", "GET", "POST", "PUT", "DELETE"},
+		Debug:          false,
+	})
+
+	err := http.ListenAndServe(":"+port, corsMiddleware.Handler(router))
+	if err != nil {
+		fmt.Errorf("ListenAndServe Front End Error: ", err)
+	}
+}
+
 func (s *Server) Run() {
 	var port = util.ExtractServerAddressPort(s.configuration.App.BackEndAddress)
 	fmt.Println("Starting API at http://localhost:" + port + "/")
@@ -61,6 +90,7 @@ func (s *Server) Run() {
 		Debug:          false,
 	})
 
+	go s.RunFrontEnd()
 	err := http.ListenAndServe(":"+port, corsMiddleware.Handler(router))
 	if err != nil {
 		fmt.Errorf("ListenAndServe Error: ", err)

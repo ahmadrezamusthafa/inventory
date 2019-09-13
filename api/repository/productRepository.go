@@ -104,6 +104,15 @@ func (repository *ProductRepository) GetProductReport(filter inputs.Filter) ([]t
 	return products, nil
 }
 
+func (repository *ProductRepository) GetProductIDBySKU(sku string) (int, error) {
+	var row dbo.Product
+	db := repository.databaseORM.First(&row, "sku = ?", sku)
+	if db.Error != nil {
+		return 0, db.Error
+	}
+	return int(row.ID), nil
+}
+
 func (repository *ProductRepository) IsProductAvailable(id int) bool {
 	var row dbo.Product
 	return !repository.databaseORM.First(&row, "id = ?", id).RecordNotFound()

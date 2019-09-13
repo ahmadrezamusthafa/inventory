@@ -2,6 +2,7 @@ package inputs
 
 type Incomming struct {
 	ID            uint    `json:"id"`
+	SKU           string  `json:"sku",omitempty`
 	ProductID     int     `json:"product_id"`
 	Receipt       string  `json:"receipt"`
 	OrderQty      int     `json:"order_qty"`
