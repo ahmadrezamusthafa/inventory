@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Inventory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="css/awesome-bootstrap-checkbox.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/theme.css">
+    <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
+
+    <script type="text/javascript" src="js/sweetalert.min.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="js/dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
+</head>
+
+<body class="flat-blue sidebar">
+<div class="sidebar">
+    <div class="menu-control toggle-sidebar">
+        <a class="navbar-brand" href="#"><i class="fa fa-bar-chart"></i> Inventory</a>
+        <i class="fa fa-bars navicon"></i>
+    </div>
+    <ul class="menu">
+        <li class="submenu">
+            <a href="index.html" class="active">
+                <div>
+                    <i class="menu-icon fa fa-table"></i>
+                    <span class="menu-title">Master Produk</span>
+                </div>
+            </a>
+        </li>
+        <li class="submenu">
+            <a href="table_incoming.html" class="active">
+                <div>
+                    <i class="menu-icon fa fa-table"></i>
+                    <span class="menu-title">Barang Masuk</span>
+                </div>
+            </a>
+        </li>
+        <li class="submenu">
+            <a href="table_outgoing.html" class="active">
+                <div>
+                    <i class="menu-icon fa fa-table"></i>
+                    <span class="menu-title">Barang Keluar</span>
+                </div>
+            </a>
+        </li>
+        <li class="submenu">
+            <a href="report_product.html" class="active">
+                <div>
+                    <i class="menu-icon fa fa-table"></i>
+                    <span class="menu-title">Laporan Nilai Barang</span>
+                </div>
+            </a>
+        </li>
+        <li class="submenu">
+            <a href="report_sales.html" class="active">
+                <div>
+                    <i class="menu-icon fa fa-table"></i>
+                    <span class="menu-title">Laporan Penjualan</span>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="content-container">
+    <nav class="navbar navbar-default">
+        <div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"><i class="fa fa-bar-chart"></i> Inventory</a>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <span class="page-title red"><h3>Barang Masuk</h3></span>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="content-block">
+                    <div class="block-title">Produk</div>
+                    <form class="form-horizontal">
+                        <div class="block-content">
+                            <div class="form-group">
+                                <label for="inputProduct" class="col-sm-3 control-label">Produk SKU</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="text-input-sku"
+                                           placeholder="Produk SKU">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputProduct" class="col-sm-3 control-label">Kwitansi</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="text-input-receipt"
+                                           placeholder="Kwitansi">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputProduct" class="col-sm-3 control-label">Jumlah Pesanan</label>
+                                <div class="col-sm-9">
+                                    <input type="number" onkeyup="this.value=this.value.replace(/[^0-9.]/gm,'')"
+                                           class="form-control" id="text-input-order-qty"
+                                           placeholder="Jumlah Pesanan">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputProduct" class="col-sm-3 control-label">Jumlah Diterima</label>
+                                <div class="col-sm-9">
+                                    <input type="number" onkeyup="this.value=this.value.replace(/[^0-9.]/gm,'')"
+                                           class="form-control" id="text-input-accepted-qty"
+                                           placeholder="Jumlah Diterima">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputProduct" class="col-sm-3 control-label">Harga Beli</label>
+                                <div class="col-sm-9">
+                                    <input type="number" onkeyup="this.value=this.value.replace(/[^0-9.]/gm,'')"
+                                           class="form-control" id="text-input-purchase-price"
+                                           placeholder="Harga Beli">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-footer">
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-9">
+                                    <button type="submit" class="btn btn-primary" id="btn-save">Simpan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="content-block">
+                    <div class="block-title">Filter</div>
+
+                    <div class="block-content">
+                        <div class="form-group" style="margin: 10px;">
+                            <label for="startDate" style="margin: 10px;">Date</label>
+                            <input type="date" name="bday" id="datetime-start-date">
+                            <label for="endDate" style="margin: 10px;">to</label>
+                            <input type="date" name="bday" id="datetime-end-date">
+                            <button type="submit" style="margin: 10px 20px;" class="btn btn-success btn-primary"
+                                    id="btn-search">Search
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="content-block">
+                    <div class="block-title">Datatable</div>
+                    <div class="block-content">
+
+                        <table id="tabel1" class="table table-striped table-bordered table-horizontal-scroll">
+                            <thead>
+                            <tr>
+                                <th rowspan="2">Waktu</th>
+                                <th rowspan="2">SKU</th>
+                                <th rowspan="2">Nama Barang</th>
+                                <th rowspan="2">Jumlah Pemesanan</th>
+                                <th rowspan="2">Jumlah Diterima</th>
+                                <th rowspan="2">Harga Beli</th>
+                                <th rowspan="2">Total</th>
+                                <th rowspan="2">Nomor Kwitansi</th>
+                                <th rowspan="2">Catatan</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        loadFirst();
+    });
+
+    $(function () {
+        $("#btn-search").click(function (e) {
+            e.preventDefault();
+            var objToGet = new Object();
+            objToGet.full_name = $('#btn-search').val();
+            getData("http://localhost:8080/incomming/get?start_date=" + $("#datetime-start-date").val() + "&end_date=" + $("#datetime-end-date").val() + "&page=1&limit=100");
+        });
+
+        $("#btn-save").click(function (e) {
+            e.preventDefault();
+            saveData();
+        });
+    });
+
+    function loadFirst() {
+        getData("http://localhost:8080/incomming/get?start_date=2000-08-08&end_date=2020-09-09&page=1&limit=100");
+    }
+
+    function getData(URL) {
+        console.log("url:" + URL);
+        var arrayReturn = [];
+        $.ajax({
+            url: URL,
+            async: false,
+            type: "GET",
+            dataType: 'json',
+            success: function (response) {
+                if (response !== null) {
+                    if (response.success === true) {
+                        if (response.result != null) {
+                            if (response.result.length > 0) {
+                                response.result.forEach(function (object, index) {
+                                    arrayReturn.push([
+                                        object.str_created_at,
+                                        object.sku,
+                                        object.name,
+                                        object.order_qty,
+                                        object.accepted_qty,
+                                        object.purchase_price,
+                                        object.total_price,
+                                        object.receipt,
+                                        object.note
+                                    ]);
+                                    return false;
+                                });
+                            }
+                        }
+                        setDataTable(arrayReturn);
+                    }
+                }
+            }
+        });
+    }
+
+    function saveData() {
+
+        if ($('#text-input-sku').val() === "" || $('#text-input-receipt').val() === "" || $('#text-input-order-qty').val() === "" || $('#text-input-accepted-qty').val() === "" || $('#text-input-purchase-price').val() === "") {
+            swal("Warning", "You must complete the data", "warning");
+            return false;
+        }
+
+        var objToPost = new Object();
+        objToPost.sku = $('#text-input-sku').val();
+        objToPost.receipt = $('#text-input-receipt').val();
+        objToPost.order_qty = parseInt($('#text-input-order-qty').val(), 10);
+        objToPost.accepted_qty = parseInt($('#text-input-accepted-qty').val(), 10);
+        objToPost.purchase_price = parseInt($('#text-input-purchase-price').val(), 10);
+
+        $.ajax({
+            url: "http://localhost:8080/incomming/create",
+            async: false,
+            type: "POST",
+            data: JSON.stringify(objToPost),
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            success: function (response) {
+                if (response !== null) {
+                    console.log(response);
+                    if (response.success) {
+                        swal("Yeay", response.result.message, "success");
+                        clearValue();
+                        loadFirst();
+                    } else {
+                        swal("Oops", response.error, "error");
+                    }
+                } else {
+                    swal("Oops", "Something went wrong!", "error");
+                }
+            },
+            error: function(xhr, status, error) {
+                var err = JSON.parse(xhr.responseText);
+                swal("Oops", err.error, "error");
+            }
+        });
+        return false;
+    }
+
+    function clearValue() {
+        $('#text-input-sku').val("");
+        $('#text-input-receipt').val("");
+        $('#text-input-order-qty').val("");
+        $('#text-input-accepted-qty').val("");
+        $('#text-input-purchase-price').val("");
+    }
+
+    function setDataTable(data) {
+        console.log(data);
+
+        var htmlResultOrder = [];
+        $.each(data, function (key, datas) {
+
+            var tableRow = $(document.createElement("tr"));
+            tableRow.append($("<td></td>").append(datas[0]));
+            tableRow.append($("<td></td>").append(datas[1]));
+            tableRow.append($("<td></td>").append(datas[2]));
+            tableRow.append($("<td></td>").append(datas[3]));
+            tableRow.append($("<td></td>").append(datas[4]));
+            tableRow.append($("<td></td>").append(datas[5]));
+            tableRow.append($("<td></td>").append(datas[6]));
+            tableRow.append($("<td></td>").append(datas[7]));
+            tableRow.append($("<td></td>").append(datas[8]));
+
+            htmlResultOrder.push(tableRow);
+        });
+
+        $("#tabel1 tbody")
+                .empty()
+                .append(...htmlResultOrder);
+    }
+
+</script>

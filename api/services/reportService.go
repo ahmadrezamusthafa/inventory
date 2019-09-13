@@ -5,10 +5,12 @@ import (
 	"github.com/rezamusthafa/inventory/api/configuration"
 	"github.com/rezamusthafa/inventory/api/repository"
 	"github.com/rezamusthafa/inventory/api/response"
-	"github.com/rezamusthafa/inventory/api/response/results"
 	"github.com/rezamusthafa/inventory/api/services/core"
 	"github.com/rezamusthafa/inventory/util"
+	"io"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -112,14 +114,40 @@ func (service *ReportService) ExportReportValueOfProduct(w http.ResponseWriter, 
 	title = append(title, []string{"Jumlah Total Barang", fmt.Sprintf("%d", totalProduct)})
 	title = append(title, []string{"Total Nilai", fmt.Sprintf("%.f", totalPrice)})
 
-	err = core.ExportDataToCSV(title, fmt.Sprintf("[Laporan] Nilai Barang %s.csv", time.Now().Format(util.DateOnlySimple)), products)
+	fileName := fmt.Sprintf("Laporan-Nilai-Barang_%s.csv", time.Now().Format(util.DateOnly))
+	err = core.ExportDataToCSV(title, fileName, products)
 	if err != nil {
 		response.WriteError("Failed to export product value report", w)
 		return
 	}
 
-	var successObj = results.TransactionStatus{Message: "Successfully export product value report"}
-	response.WriteSuccess(successObj, w)
+	file, err := os.Open(fileName)
+	if err != nil {
+		response.WriteError("Failed to get exported file", w)
+		return
+	}
+	defer func() {
+		file.Close()
+		err := os.Remove(fileName)
+		if err != nil {
+			fmt.Println("Failed to delete file")
+		}
+	}()
+
+	fileHeader := make([]byte, 512)
+	file.Read(fileHeader)
+
+	fileContentType := http.DetectContentType(fileHeader)
+
+	fileStat, _ := file.Stat()
+	fileSize := strconv.FormatInt(fileStat.Size(), 10)
+
+	w.Header().Set("Content-Type", fileContentType)
+	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	w.Header().Set("Content-Length", fileSize)
+
+	file.Seek(0, 0)
+	io.Copy(w, file)
 
 	return
 }
@@ -162,14 +190,40 @@ func (service *ReportService) ExportSalesReport(w http.ResponseWriter, r *http.R
 	title = append(title, []string{"Total Penjualan", fmt.Sprintf("%d", len(products))})
 	title = append(title, []string{"Total Barang", fmt.Sprintf("%d", totalProduct)})
 
-	err = core.ExportDataToCSV(title, fmt.Sprintf("[Laporan] Penjualan %s.csv", time.Now().Format(util.DateOnlySimple)), products)
+	fileName := fmt.Sprintf("Laporan-Penjualan_%s.csv", time.Now().Format(util.DateOnly))
+	err = core.ExportDataToCSV(title, fileName, products)
 	if err != nil {
 		response.WriteError("Failed to export sales report", w)
 		return
 	}
 
-	var successObj = results.TransactionStatus{Message: "Successfully export sales report"}
-	response.WriteSuccess(successObj, w)
+	file, err := os.Open(fileName)
+	if err != nil {
+		response.WriteError("Failed to get exported file", w)
+		return
+	}
+	defer func() {
+		file.Close()
+		err := os.Remove(fileName)
+		if err != nil {
+			fmt.Println("Failed to delete file")
+		}
+	}()
+
+	fileHeader := make([]byte, 512)
+	file.Read(fileHeader)
+
+	fileContentType := http.DetectContentType(fileHeader)
+
+	fileStat, _ := file.Stat()
+	fileSize := strconv.FormatInt(fileStat.Size(), 10)
+
+	w.Header().Set("Content-Type", fileContentType)
+	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	w.Header().Set("Content-Length", fileSize)
+
+	file.Seek(0, 0)
+	io.Copy(w, file)
 
 	return
 }

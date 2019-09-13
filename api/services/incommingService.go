@@ -11,6 +11,7 @@ import (
 	"github.com/rezamusthafa/inventory/api/services/inputs"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 type IncommingService struct {
@@ -77,9 +78,14 @@ func (service *IncommingService) CreateIncommingProduct(w http.ResponseWriter, r
 		return
 	}
 
-	if product.ProductID == 0 || product.OrderQty == 0 || product.AcceptedQty == 0 || product.PurchasePrice == 0 {
+	if (product.ProductID == 0 && product.SKU == "") || product.OrderQty == 0 || product.AcceptedQty == 0 || product.PurchasePrice == 0 {
 		response.WriteError("Missing request parameter", w)
 		return
+	}
+
+	if product.ProductID <= 0 {
+		product.SKU = strings.ToUpper(product.SKU)
+		product.ProductID, err = service.productRepository.GetProductIDBySKU(product.SKU)
 	}
 
 	if product.AcceptedQty > product.OrderQty {
